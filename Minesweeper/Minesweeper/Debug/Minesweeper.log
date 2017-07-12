@@ -1,5 +1,13 @@
-﻿  Gameplay.cpp
+﻿  Minesweeper.cpp
 c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\array2d.h(38): warning C4522: 'Array2D<Cell>': multiple assignment operators specified
   c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\board.h(13): note: see reference to class template instantiation 'Array2D<Cell>' being compiled
+  Generating Code...
+  Compiling...
+  main.cpp
+c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\array2d.h(38): warning C4522: 'Array2D<Cell>': multiple assignment operators specified
+  c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\board.h(13): note: see reference to class template instantiation 'Array2D<Cell>' being compiled
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Gameplay.cpp
   Minesweeper.vcxproj -> C:\Users\Bisraelwalter\Documents\GitHub\Minesweeper\Debug\Minesweeper.exe
   Minesweeper.vcxproj -> C:\Users\Bisraelwalter\Documents\GitHub\Minesweeper\Debug\Minesweeper.pdb (Partial PDB)
