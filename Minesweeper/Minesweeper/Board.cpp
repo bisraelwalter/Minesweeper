@@ -36,69 +36,67 @@ Board & Board::operator=(const Board & rhs)
 	return *this;
 }
 
-void Board::playerMove(Board & board, int row, int column, char moveType)
+void Board::playerMove(int row, int column,char moveType)
 {
 	if (toupper(moveType) == 'F')
 	{
-		board.m_boardArray[row][column].setStatus('F');
-		board.printBoard();
+		this->m_boardArray[row][column].setStatus('F');
+		printBoard();
 	}
 	if (toupper(moveType) == 'U')
-		checkMove(board, row, column);
+		checkMove(row, column);
 
 }
 
-void Board::checkMove(Board & board, int row, int column)
+void Board::checkMove(int row, int column)
 {
-	if (board.m_boardArray[row][column].getBombStatus())
+	if (this->m_boardArray[row][column].getBombStatus())
 		gameOver();
 	else
 	{
-		board.m_boardArray[row][column].setStatus(' ');
-		perimeterCheck(board, row, column);
-		if (board.m_boardArray[row][column].getNumberOfBombs() > 0)
-			board.m_boardArray[row][column].setStatus('0' + board.m_boardArray[row][column].getNumberOfBombs());
-		board.printBoard();
+		this->m_boardArray[row][column].setStatus(' ');
+		perimeterCheck(row, column);
+		if (this->m_boardArray[row][column].getNumberOfBombs() > 0)
+			this->m_boardArray[row][column].setStatus('0' + this->m_boardArray[row][column].getNumberOfBombs());
 	}
 }
 
-void Board::perimeterCheck(Board & board, int row, int column)
+void Board::perimeterCheck(int row, int column)
 {
 	//need to create method to check against walls, adjusting row and column in nested loop accordingly
-	int rows = row;
-	int columns = column;
+
 	int numberOfBombs = 0;
 	for(int i = (row - 1); i < (row - 1) + 3; i++)
 	{
 		for (int j = (column - 1); j < (column - 1) + 3; j++)
 		{
 			
-			if (board.m_boardArray[i][j].getBombStatus())
+			if (this->m_boardArray[i][j].getBombStatus())
 				numberOfBombs++;
 		}
 	}
-	board.m_boardArray[row][column].setNumberOfBombs(numberOfBombs);
+	this->m_boardArray[row][column].setNumberOfBombs(numberOfBombs);
 	
 }
 
-void Board::loadBombsOnBoard(Board & board)
+void Board::loadBombsOnBoard()
 {
-	int * randomNumberHolder = new int[board.getAmountOfBombs()];
+	int * randomNumberHolder = new int[this->m_amountOfBombs];
 
 	srand(time(NULL));
-	for (int i = 0; i < board.getAmountOfBombs(); i++)
+	for (int i = 0; i < this->m_amountOfBombs; i++)
 	{
-		randomNumberHolder[i] = rand() % (board.getRow() * board.getColumn()) - 1;
+		randomNumberHolder[i] = rand() % (this->m_row * this->m_column) - 1;
 		cout << randomNumberHolder[i] << " ";
 	}
 	cout << endl;
-	checkForDuplicateNumbers(randomNumberHolder, board.getAmountOfBombs());
+	checkForDuplicateNumbers(randomNumberHolder, this->m_amountOfBombs);
 
-	for (int l = 0; l < board.getAmountOfBombs(); l++)
+	for (int l = 0; l < this->m_amountOfBombs; l++)
 	{
-		int row = randomNumberHolder[l] / board.getColumn();
-		int column = abs((randomNumberHolder[l] - board.getColumn()) % board.getColumn());
-		board.m_boardArray[row][column].setBomb();
+		int row = randomNumberHolder[l] / this->m_column;
+		int column = abs((randomNumberHolder[l] - this->m_amountOfBombs) % this->m_column);
+		this->m_boardArray[row][column].setBomb();
 	}
 
 	delete[] randomNumberHolder;
@@ -114,7 +112,7 @@ void Board::checkForDuplicateNumbers(int * data, int size)
 			{
 				if (data[i] == data[j])
 				{
-					if (data[i] == (m_row * m_column) - 1)
+					if (data[i] == (this->m_row * this->m_column) - 1)
 						data[i] = data[i] - 1;
 
 					data[i] = data[i] + 1;

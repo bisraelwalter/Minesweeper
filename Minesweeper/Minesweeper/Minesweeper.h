@@ -11,15 +11,23 @@ class Minesweeper
 {
 private:
 	Board m_gameboard;
-	int amountOfBombs;
+	int m_flaggedCells;
+	bool m_gameStatus = false;
 
 public:
-	Minesweeper(Board & board);
-	bool gameStatusCheck();
-	bool gameOver();
-	void printBoard(Board & board);
-	void printRandomTester(Board & board);
-	void promptUserToEnterLocation(Board & board);
+	Minesweeper();
+	void startGame();
+	void beginnerGame();
+	void intermediateGame();
+	void expertGame();
+	void chooseGame(char choice);
+	bool checkChar(char choice);
+	void gameStatusCheck();
+	void runningGameLoop();
+	void gameWinner();
+	void printBoard();
+	void printRandomTester();
+	void promptUserToEnterLocation();
 	bool gameEnd();
 
 };

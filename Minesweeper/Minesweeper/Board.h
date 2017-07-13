@@ -20,10 +20,10 @@ public:
 	Board(int row, int column, int bombs);
 	Board(Board & copy);
 	Board & operator=(const Board & rhs);
-	void playerMove(Board & board, int row, int column, char moveType);
-	void checkMove(Board & board, int row, int column);
-	void perimeterCheck(Board & board, int row, int column);
-	void loadBombsOnBoard(Board & board);
+	void playerMove(int row, int column, char moveType);
+	void checkMove(int row, int column);
+	void perimeterCheck(int row, int column);
+	void loadBombsOnBoard();
 	void checkForDuplicateNumbers(int * data, int size);
 	void gameOver();
 	int getRow() const;

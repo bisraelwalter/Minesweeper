@@ -1,35 +1,112 @@
 #include "Minesweeper.h"
 
 
-Minesweeper::Minesweeper(Board & board)
+Minesweeper::Minesweeper()
 {
-	this->m_gameboard = board;
+	this->m_flaggedCells = 0;
 }
 
-bool Minesweeper::gameStatusCheck()
+void Minesweeper::startGame()
 {
-	int numberOfFlaggedCells = 0;
-	return true;
-	
+	char choice;
+	bool runningLoop = false;
+
+	cout << "Play a game of minesweeper?" << endl;
+
+	while (!runningLoop)
+	{
+		cout << "Choose a level: (B) for beginner, (I) for intermediate, (E) for expert: ";
+		cin >> choice;
+		cout << endl;
+		runningLoop = checkChar(choice);
+		if (!runningLoop)
+			cout << "Selection needs to be a (B), (I), or (E)" << endl;
+	}
+	chooseGame(choice);
+	runningGameLoop();
 }
 
-bool Minesweeper::gameOver()
+void Minesweeper::beginnerGame()
 {
-	this->m_gameboard.gameOver();
-	return true;
+	Board beginnerGame(10, 10, 10);
+	beginnerGame.loadBombsOnBoard();
+	this->m_gameboard = beginnerGame;
 }
 
-void Minesweeper::printBoard(Board & board)
+void Minesweeper::intermediateGame()
 {
-		board.printBoard();
+	Board intermediateGame(16, 16, 40);
+	intermediateGame.loadBombsOnBoard();
+	this->m_gameboard = intermediateGame;
 }
 
-void Minesweeper::printRandomTester(Board & board)
+void Minesweeper::expertGame()
 {
-	m_gameboard.loadBombsOnBoard(board);
+	Board expertGame(16, 30, 100);
+	expertGame.loadBombsOnBoard();
+	this->m_gameboard = expertGame;
 }
 
-void Minesweeper::promptUserToEnterLocation(Board & board)
+void Minesweeper::chooseGame(char choice)
+{
+	char upperChoice = toupper(choice);
+	if (upperChoice == 'B') beginnerGame();
+	if (upperChoice == 'I') intermediateGame();
+	if (upperChoice == 'E') expertGame();
+}
+
+bool Minesweeper::checkChar(char choice)
+{
+	char upperChoice = toupper(choice);
+	if (upperChoice == 'B' || upperChoice == 'I' || upperChoice == 'E')
+		return true;
+
+	return false;
+}
+
+void Minesweeper::gameStatusCheck()
+{
+	int doesFlaggedHaveBomb = 0;
+	if (this->m_flaggedCells == this->m_gameboard.getAmountOfBombs())
+	{
+		for(int i = 0; i < this->m_gameboard.getRow(); i++)
+		{
+			for(int j = 0; j < this->m_gameboard.getColumn(); j++)
+			{
+				if(this->m_gameboard.)
+			}
+		}
+	}
+		this->m_gameStatus = true;	
+}
+
+void Minesweeper::runningGameLoop()
+{
+	while (!this->m_gameStatus)
+	{
+		printBoard();
+		promptUserToEnterLocation();
+		gameStatusCheck();
+	}
+	gameWinner();
+}
+
+void Minesweeper::gameWinner()
+{
+	cout << "CONGRATULATIONS. YOU'VE WON!!!!!!!!" << endl;
+}
+
+void Minesweeper::printBoard()
+{
+		this->m_gameboard.printBoard();
+}
+
+void Minesweeper::printRandomTester()
+{
+	this->m_gameboard.loadBombsOnBoard();
+}
+
+void Minesweeper::promptUserToEnterLocation()
 {	
 	int row;
 	int column;
@@ -38,7 +115,7 @@ void Minesweeper::promptUserToEnterLocation(Board & board)
 	cin >> flagOrUncover >> row >> column;
 	cout << endl;
 
-	board.playerMove(board, row - 1, column - 1, flagOrUncover);
+	this->m_gameboard.playerMove(row - 1, column - 1, flagOrUncover);
 
 }
 
