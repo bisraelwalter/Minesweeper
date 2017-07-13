@@ -25,8 +25,8 @@ public:
 	void setEmpty(char state);
 	bool getFlagged() const;
 	void setFlagged(char state);
-	bool getBomb() const;
-	void setBomb(char state);
+	bool getBombStatus() const;
+	void setBomb(); const
 	int getNumberOfBombs() const;
 	void setNumberOfBombs(int numberOfBombs);
 

@@ -53,17 +53,17 @@ void Cell::setFlagged(char state)
 	this->m_flagged = state;
 }
 
-bool Cell::getBomb() const
+bool Cell::getBombStatus() const
 {
-	return this->getBomb();
+	return this->m_bomb;
 }
 
-void Cell::setBomb(char state)
+void Cell::setBomb()
 {
-	this->m_bomb = state;
+	this->m_bomb = true;
 }
 
-int Cell::getNumberOfBombs() const
+const int Cell::getNumberOfBombs() const
 {
 	return this->m_numberOfBombs;
 }

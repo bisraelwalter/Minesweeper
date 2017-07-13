@@ -31,6 +31,7 @@ void main()
 				cout << "Selection needs to be a (B), (I), or (E)" << endl;
 		}
 		chooseGame(choice);
+		
 	}
 	catch (out_of_range & ex)
 	{
@@ -53,8 +54,14 @@ bool checkChar(char choice)
 
 void startGame(Board & board)
 {
-	Minesweeper game(board);
-	game.printBoard();
+
+	while (!game.gameEnd())
+	{
+		game.printRandomTester(board);
+		game.printBoard(board);
+		game.promptUserToEnterLocation(board);
+	}
+
 
 }
 

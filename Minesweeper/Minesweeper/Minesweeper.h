@@ -17,6 +17,9 @@ public:
 	Minesweeper(Board & board);
 	bool gameStatusCheck();
 	bool gameOver();
-	void printBoard();
+	void printBoard(Board & board);
+	void printRandomTester(Board & board);
+	void promptUserToEnterLocation(Board & board);
+	bool gameEnd();
 
 };

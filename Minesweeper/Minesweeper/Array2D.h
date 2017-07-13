@@ -152,9 +152,8 @@ inline void Array2D<T>::setColumn(int columns)
 template<class T>
 inline T & Array2D<T>::Select(int row, int column)
 {
-	if (row == 0)
-		return m_array[row + column];
-	else
+	//if (row == 0)
+	//	return m_array[row + column];
 		return m_array[(row * m_col) + column];
 }
 
