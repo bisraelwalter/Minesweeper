@@ -11,8 +11,7 @@ class Minesweeper
 {
 private:
 	Board m_gameboard;
-	int m_flaggedCells;
-	bool m_gameStatus = false;
+	bool m_gameStatus;
 
 public:
 	Minesweeper();
@@ -28,6 +27,7 @@ public:
 	void printBoard();
 	void printRandomTester();
 	void promptUserToEnterLocation();
+	void gameOver();
 	bool gameEnd();
 
 };

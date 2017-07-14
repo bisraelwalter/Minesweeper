@@ -3,7 +3,7 @@
 
 Minesweeper::Minesweeper()
 {
-	this->m_flaggedCells = 0;
+	this->m_gameStatus = false;
 }
 
 void Minesweeper::startGame()
@@ -66,17 +66,11 @@ bool Minesweeper::checkChar(char choice)
 
 void Minesweeper::gameStatusCheck()
 {
-	int doesFlaggedHaveBomb = 0;
-	if (this->m_flaggedCells == this->m_gameboard.getAmountOfBombs())
-	{
-		for(int i = 0; i < this->m_gameboard.getRow(); i++)
-		{
-			for(int j = 0; j < this->m_gameboard.getColumn(); j++)
-			{
-				if(this->m_gameboard.)
-			}
-		}
-	}
+	int spacesWithoutBombs = (this->m_gameboard.getRow() * this->m_gameboard.getColumn())
+	- this->m_gameboard.getAmountOfBombs();
+
+	if (this->m_gameboard.getFlaggedCells() == this->m_gameboard.getAmountOfBombs())
+		if(this->m_gameboard.getUncoveredCells() == spacesWithoutBombs)
 		this->m_gameStatus = true;	
 }
 
@@ -84,16 +78,20 @@ void Minesweeper::runningGameLoop()
 {
 	while (!this->m_gameStatus)
 	{
+		//system("cls");
 		printBoard();
+		this->m_gameboard.printBombMap(); //put in cheat code
 		promptUserToEnterLocation();
 		gameStatusCheck();
+		if (this->m_gameboard.getGameStatus())
+			gameOver();
 	}
-	gameWinner();
 }
 
 void Minesweeper::gameWinner()
 {
 	cout << "CONGRATULATIONS. YOU'VE WON!!!!!!!!" << endl;
+	this->m_gameStatus = true;
 }
 
 void Minesweeper::printBoard()
@@ -108,18 +106,38 @@ void Minesweeper::printRandomTester()
 
 void Minesweeper::promptUserToEnterLocation()
 {	
+
 	int row;
 	int column;
-	char flagOrUncover;
+	char flagUncoverRemove;
+	while (!this->m_gameboard.getPlayerBoardEntry())
+	{
 	cout << "Enter location on board: ";
-	cin >> flagOrUncover >> row >> column;
+	cin >> flagUncoverRemove >> row >> column;
 	cout << endl;
 
-	this->m_gameboard.playerMove(row - 1, column - 1, flagOrUncover);
+		if (!this->m_gameboard.getPlayerBoardEntry())
+			cout << "That is not a valid entry, please re-enter" << endl;
+		this->m_gameboard.playerMoveParameterCheck(row - 1, column - 1, flagUncoverRemove);
+		//this->m_gameboard.playerMove(row - 1, column - 1, flagUncoverRemove);
+	}
+	this->m_gameboard.playerMove(row - 1, column - 1, flagUncoverRemove);
+}
 
+void Minesweeper::gameOver()
+{
+	this->m_gameboard.gameOver();
+	this->m_gameStatus = true;
 }
 
 bool Minesweeper::gameEnd()
 {
+	char choice;
+	cout << "Want to play another game? (Y) or any key to exit: ";
+	cin >> choice;
+	
+	if (toupper(choice) == 'Y')
+		return true;
+
 	return false;
 }

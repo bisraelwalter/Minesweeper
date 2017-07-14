@@ -4,16 +4,19 @@
 #include <iostream>
 #include "Minesweeper.h"
 
-
-
+bool gameContinue = true;
+void gameEnd();
 
 void main()
 {
 	try
 	{
-		Minesweeper game;
-		game.startGame();
-		
+		while (gameContinue)
+		{
+			Minesweeper game;
+			game.startGame();
+			gameEnd();
+		}
 	}
 	catch (out_of_range & ex)
 	{
@@ -26,5 +29,16 @@ void main()
 }
 
 
+void gameEnd()
+{
+	char choice;
+	cout << "Want to play another game? (Y) or any key to exit: ";
+	cin >> choice;
+
+	if (toupper(choice) == 'Y')
+		 gameContinue = true;
+
+	gameContinue = false;
+}
 
 

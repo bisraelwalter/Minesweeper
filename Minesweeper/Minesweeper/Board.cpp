@@ -7,6 +7,7 @@
 Board::Board()
 {
 	this->m_amountOfBombs = 0;
+	this->m_inCellAmoungOfBombs = 0;
 	this->m_boardArray.setRow(this->m_row = 0);
 	this->m_boardArray.setColumn(this->m_column = 0);
 
@@ -38,45 +39,178 @@ Board & Board::operator=(const Board & rhs)
 
 void Board::playerMove(int row, int column,char moveType)
 {
-	if (toupper(moveType) == 'F')
-	{
-		this->m_boardArray[row][column].setStatus('F');
-		printBoard();
-	}
-	if (toupper(moveType) == 'U')
-		checkMove(row, column);
-
+		if (toupper(moveType) == 'F')
+		{
+			this->m_boardArray[row][column].setStatus('F');
+			this->m_flaggedCells++;
+		}
+		if (toupper(moveType) == 'U')
+		{
+			this->m_boardArray[row][column].setStatus(' ');
+			if (!checkMove(row, column))
+				perimeterCheck(row, column);
+			else
+				m_gameStatus = true;
+			this->m_uncoveredCells++;
+		}
+		if (toupper(moveType) == 'R')
+		{
+			this->m_boardArray[row][column].setStatus('?');
+			this->m_flaggedCells--;
+		}	
 }
 
-void Board::checkMove(int row, int column)
+void Board::playerMoveParameterCheck(int row, int column, char moveType)
+{
+	if (toupper(moveType) == 'F' ||
+		toupper(moveType) == 'U' ||
+		toupper(moveType) == 'R')
+	{
+		if (row < this->m_row - 1 && row > 0
+			&& column < this->m_column - 1 && column > 0)
+			this->m_playersBoardEntry = true;
+	}
+}
+
+bool Board::getPlayerBoardEntry() const
+{
+	return this-> m_playersBoardEntry;
+}
+
+
+bool Board::checkMove(int row, int column)
 {
 	if (this->m_boardArray[row][column].getBombStatus())
-		gameOver();
-	else
-	{
-		this->m_boardArray[row][column].setStatus(' ');
-		perimeterCheck(row, column);
-		if (this->m_boardArray[row][column].getNumberOfBombs() > 0)
-			this->m_boardArray[row][column].setStatus('0' + this->m_boardArray[row][column].getNumberOfBombs());
-	}
+		return true;
+
+	return false;
 }
 
 void Board::perimeterCheck(int row, int column)
 {
-	//need to create method to check against walls, adjusting row and column in nested loop accordingly
+	int rows = row;
+	int columns = column;
+	int counterLimitrows = 3;
+	int counterLimitcolumns = 3;
 
-	int numberOfBombs = 0;
-	for(int i = (row - 1); i < (row - 1) + 3; i++)
+	checkPerimeterCellLoop(rows, columns, counterLimitrows, counterLimitcolumns);
+	if (this->m_inCellAmoungOfBombs < 1)
+		cellIsClearCheckPerimeterCells(row, column, counterLimitrows, counterLimitcolumns);
+	this->m_inCellAmoungOfBombs = 0;
+	this->m_playersBoardEntry = false;
+}
+
+void Board::checkPerimeterCellLoop(int &row, int &column, int & countRow, int & countCol)
+{
+	int setRow = row;
+	int setCol = column;
+	checkForTheEdgeOfBoard(row, column, countRow, countCol);
+	for (int i = (row - 1); i < (row - 1) + countRow; i++)
 	{
-		for (int j = (column - 1); j < (column - 1) + 3; j++)
+		for (int j = (column - 1); j < (column - 1) + countCol; j++)
 		{
-			
 			if (this->m_boardArray[i][j].getBombStatus())
-				numberOfBombs++;
+				this->m_inCellAmoungOfBombs++;
 		}
 	}
-	this->m_boardArray[row][column].setNumberOfBombs(numberOfBombs);
-	
+	if (this->m_inCellAmoungOfBombs > 0)
+	{
+		this->m_boardArray[setRow][setCol].setNumberOfBombs(this->m_inCellAmoungOfBombs);
+		this->m_boardArray[setRow][setCol].setStatus('0' + this->m_inCellAmoungOfBombs);
+	}
+	else
+	this->m_boardArray[setRow][setCol].setStatus(' ');
+}
+
+void Board::checkCellsOfPerimeterLoop(int row, int column, int countRow, int countCol)
+{
+	int setRow = row;
+	int setCol = column;
+	int counterLimitrows = 3;
+	int counterLimitcolumns = 3;
+	checkForTheEdgeOfBoard(row, column, countRow, countCol);
+	for (int i = (row - 1); i < (row - 1) + countRow; i++)
+	{
+		for (int j = (column - 1); j < (column - 1) + countCol; j++)
+		{
+			if (this->m_boardArray[i][j].getBombStatus())
+				this->m_inCellAmoungOfBombs++;
+		}
+	}
+	if (this->m_inCellAmoungOfBombs > 0)
+	{
+		this->m_boardArray[setRow][setCol].setNumberOfBombs(this->m_inCellAmoungOfBombs);
+		this->m_boardArray[setRow][setCol].setStatus('0' + this->m_inCellAmoungOfBombs);
+	}
+	else
+		this->m_boardArray[setRow][setCol].setStatus(' ');
+	this->m_inCellAmoungOfBombs = 0;
+	printBoard();
+}
+
+void Board::cellIsClearCheckPerimeterCells(int row, int column, int &countRow, int &countCol)
+{
+	int rows = row;
+	int columns = column;
+	int counterLimitrows = 3;
+	int counterLimitcolumns = 3;
+
+	checkForTheEdgeOfBoard(row, column, countRow, countCol);
+	for (int i = (row - 1); i < (row - 1) + countRow; i++)
+	{
+		for (int j = (column - 1); j < (column - 1) + countCol; j++)
+		{
+			if(this->m_boardArray[i][j].getStatus() == '?')
+			checkCellsOfPerimeterLoop(i, j, countRow, countCol);
+
+		}
+	}
+}
+
+void Board::checkForTheEdgeOfBoard(int &rows, int &columns, int & countRow, int & countCol) const
+{
+	int row = rows;
+	int column = columns;
+	if (column == 0 && row != 0 && row != this->m_row - 1)
+	{
+		columns = columns + 1;
+		countCol = 2;
+	}
+	if (column == 0 && row != 0 && row == this->m_row -1)
+	{
+		columns = columns + 1;
+		countRow = 2;
+		countCol = 2;
+	}
+	if (column == 0 && row == 0 && row != this->m_row)
+	{
+		columns = columns + 1;
+		rows = rows + 1;
+		countRow = 2;
+		countCol = 2;
+	}
+	if (column == this->m_column - 1 && row != 0 && row != this->m_row - 1)
+		countCol = 2;
+	if (column == this->m_column - 1 && row != 0 && row == this->m_row - 1)
+	{
+		countRow = 2;
+		countCol = 2;
+	}
+	if (column == this->m_column - 1 && row == 0 && row != this->m_row - 1)
+	{
+		rows = rows + 1;
+		countCol = 2;
+	}
+	if (row == 0 && column != this->m_column - 1 && column != 0)
+	{
+		rows = rows + 1;
+		countRow = 2;
+	}
+	if (row == this->m_row - 1 && column != this->m_column - 1 && column != 0)
+		countRow = 2;
+
+
+
 }
 
 void Board::loadBombsOnBoard()
@@ -102,7 +236,7 @@ void Board::loadBombsOnBoard()
 	delete[] randomNumberHolder;
 }
 
-void Board::checkForDuplicateNumbers(int * data, int size)
+void Board::checkForDuplicateNumbers(int * data, int size) const
 {
 	int duplicateAmount = 0;
 	for(int i = 0; i < size; i++)
@@ -127,7 +261,7 @@ void Board::checkForDuplicateNumbers(int * data, int size)
 void Board::gameOver()
 {
 	cout << "BOOM!!!!!!!!" << endl;
-	cout << "GAME OVER" << endl;
+	cout << "GAME OVER..........." << endl;
 }
 
 int Board::getRow() const
@@ -157,6 +291,21 @@ int Board::getAmountOfBombs() const
 	return this->m_amountOfBombs;
 }
 
+int Board::getUncoveredCells() const
+{
+	return this->m_uncoveredCells;
+}
+
+int Board::getFlaggedCells() const
+{
+	return this->m_flaggedCells;
+}
+
+bool Board::getGameStatus()
+{
+	return this->m_gameStatus;
+}
+
 void Board::printBoard()
 {
 	cout << "    ";
@@ -172,32 +321,35 @@ void Board::printBoard()
 				{
 					if (i < 9 && j == 0)
 						cout << " ";
+	
 					cout << setw(3) << m_boardArray[i][j].getStatus();
-				}
-				
+				}				
 		}
 		cout << endl;
 	}
+}
 
-		cout << "    ";
-		for (int h = 0; h < m_boardArray.getColumn(); h++)
-			cout << setw(3) << h + 1;
-		cout << endl;
+void Board::printBombMap()
+{
+	cout << "    ";
+	for (int h = 0; h < m_boardArray.getColumn(); h++)
+		cout << setw(3) << h + 1;
+	cout << endl;
 
-		for (int i = 0; i < m_boardArray.getRow(); i++)
+	for (int i = 0; i < m_boardArray.getRow(); i++)
+	{
+		cout << "[" << i + 1 << "]";
 		{
-			cout << "[" << i + 1 << "]";
+			for (int j = 0; j < m_boardArray.getColumn(); j++)
 			{
-				for (int j = 0; j < m_boardArray.getColumn(); j++)
-				{
-					if (i < 9 && j == 0)
-						cout << " ";
-					if (m_boardArray[i][j].getBombStatus())
-						cout << setw(3) << "B";
-					else
+				if (i < 9 && j == 0)
+					cout << " ";
+				if (m_boardArray[i][j].getBombStatus())
+					cout << setw(3) << "B";
+				else
 					cout << setw(3) << " ";
-				}
 			}
-			cout << endl;
 		}
+		cout << endl;
+	}
 }
