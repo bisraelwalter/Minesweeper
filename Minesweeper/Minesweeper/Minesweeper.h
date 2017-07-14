@@ -12,6 +12,8 @@ class Minesweeper
 private:
 	Board m_gameboard;
 	bool m_gameStatus;
+	bool m_gameWinner;
+	bool m_cheatCode;
 
 public:
 	Minesweeper();
@@ -21,6 +23,7 @@ public:
 	void expertGame();
 	void chooseGame(char choice);
 	bool checkChar(char choice);
+	void gameInstructions();
 	void gameStatusCheck();
 	void runningGameLoop();
 	void gameWinner();

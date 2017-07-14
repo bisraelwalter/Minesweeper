@@ -37,7 +37,7 @@ void gameEnd()
 
 	if (toupper(choice) == 'Y')
 		 gameContinue = true;
-
+	else
 	gameContinue = false;
 }
 

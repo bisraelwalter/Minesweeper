@@ -5,7 +5,7 @@
 
 Cell::Cell()
 {
-	this->m_cellStatus = '?';
+	this->m_cellStatus = '-';
 	this->m_covered = true;
 	this->m_empty = false;
 	this->m_flagged = false;

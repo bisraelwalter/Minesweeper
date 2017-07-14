@@ -1,10 +1,1 @@
-﻿  Minesweeper.cpp
-c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\array2d.h(38): warning C4522: 'Array2D<Cell>': multiple assignment operators specified
-  c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\board.h(13): note: see reference to class template instantiation 'Array2D<Cell>' being compiled
-  Board.cpp
-c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\array2d.h(38): warning C4522: 'Array2D<Cell>': multiple assignment operators specified
-  c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\board.h(13): note: see reference to class template instantiation 'Array2D<Cell>' being compiled
-c:\users\bisraelwalter\documents\github\minesweeper\minesweeper\board.cpp(220): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
-  Minesweeper.vcxproj -> C:\Users\Bisraelwalter\Documents\GitHub\Minesweeper\Debug\Minesweeper.exe
-  Minesweeper.vcxproj -> C:\Users\Bisraelwalter\Documents\GitHub\Minesweeper\Debug\Minesweeper.pdb (Partial PDB)
+﻿

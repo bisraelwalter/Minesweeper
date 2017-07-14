@@ -27,6 +27,7 @@ Board::Board(Board & copy)
 	this->m_boardArray = copy.m_boardArray;
 	this->m_row = copy.m_row;
 	this->m_column = copy.m_column;
+	this->m_amountOfBombs = copy.m_amountOfBombs;
 }
 
 Board & Board::operator=(const Board & rhs)
@@ -34,6 +35,7 @@ Board & Board::operator=(const Board & rhs)
 	this->m_boardArray = rhs.m_boardArray;
 	this->m_row = rhs.m_row;
 	this->m_column = rhs.m_column;
+	this->m_amountOfBombs = rhs.m_amountOfBombs;
 	return *this;
 }
 
@@ -42,20 +44,20 @@ void Board::playerMove(int row, int column,char moveType)
 		if (toupper(moveType) == 'F')
 		{
 			this->m_boardArray[row][column].setStatus('F');
+			this->m_playersBoardEntry = false;
 			this->m_flaggedCells++;
 		}
 		if (toupper(moveType) == 'U')
 		{
-			this->m_boardArray[row][column].setStatus(' ');
 			if (!checkMove(row, column))
 				perimeterCheck(row, column);
 			else
 				m_gameStatus = true;
-			this->m_uncoveredCells++;
 		}
 		if (toupper(moveType) == 'R')
 		{
-			this->m_boardArray[row][column].setStatus('?');
+			this->m_boardArray[row][column].setStatus('-');
+			this->m_playersBoardEntry = false;
 			this->m_flaggedCells--;
 		}	
 }
@@ -66,8 +68,8 @@ void Board::playerMoveParameterCheck(int row, int column, char moveType)
 		toupper(moveType) == 'U' ||
 		toupper(moveType) == 'R')
 	{
-		if (row < this->m_row - 1 && row > 0
-			&& column < this->m_column - 1 && column > 0)
+		if (row < this->m_row && row >= 0
+			&& column < this->m_column && column >= 0)
 			this->m_playersBoardEntry = true;
 	}
 }
@@ -117,9 +119,13 @@ void Board::checkPerimeterCellLoop(int &row, int &column, int & countRow, int & 
 	{
 		this->m_boardArray[setRow][setCol].setNumberOfBombs(this->m_inCellAmoungOfBombs);
 		this->m_boardArray[setRow][setCol].setStatus('0' + this->m_inCellAmoungOfBombs);
+		this->m_uncoveredCells++;
 	}
 	else
-	this->m_boardArray[setRow][setCol].setStatus(' ');
+	{
+		this->m_boardArray[setRow][setCol].setStatus(' ');
+		this->m_uncoveredCells++;
+	}
 }
 
 void Board::checkCellsOfPerimeterLoop(int row, int column, int countRow, int countCol)
@@ -141,11 +147,14 @@ void Board::checkCellsOfPerimeterLoop(int row, int column, int countRow, int cou
 	{
 		this->m_boardArray[setRow][setCol].setNumberOfBombs(this->m_inCellAmoungOfBombs);
 		this->m_boardArray[setRow][setCol].setStatus('0' + this->m_inCellAmoungOfBombs);
+		this->m_uncoveredCells++;
 	}
 	else
+	{
 		this->m_boardArray[setRow][setCol].setStatus(' ');
+		this->m_uncoveredCells++;
+	}
 	this->m_inCellAmoungOfBombs = 0;
-	printBoard();
 }
 
 void Board::cellIsClearCheckPerimeterCells(int row, int column, int &countRow, int &countCol)
@@ -160,7 +169,7 @@ void Board::cellIsClearCheckPerimeterCells(int row, int column, int &countRow, i
 	{
 		for (int j = (column - 1); j < (column - 1) + countCol; j++)
 		{
-			if(this->m_boardArray[i][j].getStatus() == '?')
+			if(this->m_boardArray[i][j].getStatus() == '-')
 			checkCellsOfPerimeterLoop(i, j, countRow, countCol);
 
 		}
