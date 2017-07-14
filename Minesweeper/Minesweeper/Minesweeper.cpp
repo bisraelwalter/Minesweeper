@@ -88,8 +88,9 @@ void Minesweeper::gameInstructions()
 		cout << "Try to clear the minefield without opening a mine" << endl;
 		cout << endl;
 		cout << "How to play?" << endl;
+		cout << endl;
 		cout << "You will have three inputs with spaces in between each input" << endl;
-		cout << "The first in put is a letter. There are three choices." << endl;
+		cout << "The first input is a letter. There are three letter choices." << endl;
 		cout << "Uncover a cell, the input letter is 'U'. (sidenote: letters can be upper or lowercase)" << endl;
 		cout << "Flag a cell to mark as a bomb, the input letter is 'F'." << endl;
 		cout << "Remove a flag that was previously marked, the input letter is 'R'." << endl;
@@ -101,7 +102,11 @@ void Minesweeper::gameInstructions()
 		cout << "U 6 9 - This will uncover a cell at row 6 column 9." << endl;
 		cout << "R 9 3 - This will remove a flag at row 9 column 3." << endl;
 		cout << endl;
+		cout << "If you uncover a cell that does not have a bomb in the adjacent cells," << endl;
+		cout << "those adjacent cell will be uncovered too." << endl;
+		cout << endl;
 		cout << "How to win.....Flag all the bombs and uncover all the cells!!!!!!" << endl;
+		
 
 		cout << "Enter (Y) to play: ";
 		cin >> endInstructions;

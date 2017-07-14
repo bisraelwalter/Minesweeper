@@ -317,9 +317,12 @@ bool Board::getGameStatus()
 
 void Board::printBoard()
 {
+	int spacing = 3;
+	if (this->m_amountOfBombs > 40)
+		spacing = 2;
 	cout << "    ";
 	for (int h = 0; h < m_boardArray.getColumn(); h++)
-			cout << setw(3) << h + 1;
+			cout << setw(spacing) << h + 1;
 	cout << endl;
 
 		for (int i = 0; i < m_boardArray.getRow(); i++)
@@ -331,7 +334,7 @@ void Board::printBoard()
 					if (i < 9 && j == 0)
 						cout << " ";
 	
-					cout << setw(3) << m_boardArray[i][j].getStatus();
+					cout << setw(spacing) << m_boardArray[i][j].getStatus();
 				}				
 		}
 		cout << endl;
@@ -340,9 +343,12 @@ void Board::printBoard()
 
 void Board::printBombMap()
 {
+	int spacing = 3;
+	if (this->m_amountOfBombs > 40)
+		spacing = 2;
 	cout << "    ";
 	for (int h = 0; h < m_boardArray.getColumn(); h++)
-		cout << setw(3) << h + 1;
+		cout << setw(spacing) << h + 1;
 	cout << endl;
 
 	for (int i = 0; i < m_boardArray.getRow(); i++)
@@ -354,9 +360,9 @@ void Board::printBombMap()
 				if (i < 9 && j == 0)
 					cout << " ";
 				if (m_boardArray[i][j].getBombStatus())
-					cout << setw(3) << "B";
+					cout << setw(spacing) << "B";
 				else
-					cout << setw(3) << " ";
+					cout << setw(spacing) << " ";
 			}
 		}
 		cout << endl;
